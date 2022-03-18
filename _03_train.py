@@ -46,7 +46,7 @@ def main():
     #os.replace(os.path.join(model_dir,'checkpoint.pth.tar'),'model/model.pth')
     if (os.path.isfile(os.path.join('run/%s/%s' % (d_name,args.name),'model_best.pth.tar'))):
         os.replace(os.path.join('run/%s/%s' % (d_name,args.name),'model_best.pth.tar'),'model/model_%s.pth' % datetime.today().strftime("%Y%m%d%H%M"))
-        print('model saved at ./model/model.pth , please back-up your model! ')
+        print('model saved at ./model/model_%s.pth' % datetime.today().strftime("%Y%m%d%H%M"))
     else:
         latest_exp = glob('run/%s/%s/*' % (d_name,args.name))
         latest_exp = [int(i.split('_')[-1]) for i in latest_exp]
