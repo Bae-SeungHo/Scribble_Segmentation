@@ -12,7 +12,7 @@ edited by Bae-SeungHo
 1. venv 를 통해 rloss 폴더 내의 'v-env' 이름의 가상환경을 생성하고 activate 해 주세요.
 
 ```cmd
-ppython3 -m venv rloss/v-env
+python3 -m venv rloss/v-env
 ```
 
 
