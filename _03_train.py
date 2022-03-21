@@ -9,7 +9,7 @@ def main():
     parser = argparse.ArgumentParser(description="train model")
 
     parser.add_argument("-checkpoint", help="checkpoint file dir (also you can use 'auto')",required=False,default=None)
-    parser.add_argument("-dataset", help="datasets dir", required=False , default='custom')
+    parser.add_argument("-dataset", help="dataset type",choices=['custom','pascal','coco','cityscapes'] , default='custom')
     parser.add_argument("-output", help="output dir", required=False , default='model/')
     parser.add_argument("-lr", help="learning rate", required=False , default='0.007')
     parser.add_argument("-batch", help="batch size", required=False , default='4')
@@ -31,15 +31,20 @@ def main():
         if os.path.exists('run/'):    
             shutil.rmtree('run/')
     os.makedirs(args.output,exist_ok=True)
-    if args.checkpoint is None:
-        #os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --densecrfloss 2e-9 --rloss-scale 0.5 --sigma-rgb 15 --sigma-xy 100 --eval-interval 5 --save-interval 5' % (args.lr , args.epochs , args.name,args.dataset))
-        os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --eval-interval 5 --save-interval 5' % (args.lr , args.epochs , args.name,args.dataset))
-    elif args.checkpoint == 'auto':
+    
+    #you can customize parameters
+    command = 'rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --eval-interval 5 --save-interval 5 ' % (args.lr , args.epochs , args.name, args.dataset)
+    #like 'rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --densecrfloss 2e-9 --rloss-scale 0.5 --sigma-rgb 15 --sigma-xy 100 --eval-interval 5 --save-interval 5' % (args.lr , args.epochs , args.name,args.dataset)
+    
+    if args.checkpoint == 'auto':
         latest_model = max(glob('model/*'))
-        os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --densecrfloss 2e-9 --rloss-scale 0.5 --sigma-rgb 15 --sigma-xy 100 --eval-interval 5 --save-interval 5 --resume %s' % (args.lr , args.epochs , args.name,args.dataset,latest_model))
-    elif os.path.isfile(args.checkpoint):
-        os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --densecrfloss 2e-9 --rloss-scale 0.5 --sigma-rgb 15 --sigma-xy 100 --eval-interval 5 --save-interval 5 --resume %s' % (args.lr , args.epochs , args.name,args.dataset,args.checkpoint))
-            
+        os.system(command+'--resume %s '% latest_model)
+        
+    elif args.checkpoint:
+        os.system(command+'--resume %s '% args.checkpoint)
+        
+    else:
+        os.system(command)
             
     d_name = args.dataset
     #$model_dir = max(glob('run/pascal/%s/*/' % args.name))
@@ -51,8 +56,13 @@ def main():
         latest_exp = glob('run/%s/%s/*' % (d_name,args.name))
         latest_exp = [int(i.split('_')[-1]) for i in latest_exp]
         latest_version = sorted(latest_exp,reverse=True)[0]
-        latest_exp = glob('run/%s/%s/*_%d' % (d_name,args.name,latest_version))[0]
-        os.replace(os.path.join(latest_exp,'checkpoint.pth.tar'),'model/model_%s.pth' % datetime.today().strftime("%Y%m%d%H%M"))
+        latest_exp = glob('run/%s/%s/*_%d/checkpoint*.tar' % (d_name,args.name,latest_version))
+        latest_version = max(latest_exp)
+        try:
+            os.replace(latest_version,'model/model_%s.pth' % datetime.today().strftime("%Y%m%d%H%M"))
+        except:
+            print("There's Error while training. check the total epochs is larger than starting epoch and try again")
+            
 
     
 if __name__ == '__main__':

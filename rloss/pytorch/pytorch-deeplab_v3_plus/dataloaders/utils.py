@@ -26,7 +26,7 @@ def MakeColorSet(classes):
         
     return label_array
 
-def decode_segmap(label_mask, dataset,plot=False):
+def decode_segmap(label_mask, dataset,plot=False,n_cls=None):
     """Decode segmentation class labels into a color image
     Args:
         label_mask (np.ndarray): an (M,N) array of integer values denoting
@@ -45,19 +45,28 @@ def decode_segmap(label_mask, dataset,plot=False):
     
     #BSH Added
     elif dataset == 'custom':
-      
+        
         path = Path.db_root_dir('custom')
             
-        with open(os.path.join(path,'classes.txt'),'r') as f:
-            values = f.readlines()
-        n_classes = int(values[0].strip())
+        try:
+            with open(os.path.join(path,'classes.txt'),'r') as f:
+                values = f.readlines()
+            n_classes = int(values[0].strip())
+        except:
+            n_classes = n_cls
+            print('::CAUTION::  No classes.txt file found. ColorSet will be random. classes.txt are made in root folder')
+            label_colours = MakeColorSet(n_classes)
+            with open('classes.txt','w') as f:
+                f.write(str(n_classes)+'\n')
+                for idx,color in enumerate(label_colours):
+                    f.write('%d %s\n' % (idx,tuple(color)))
+        else:
         
-        #label_colours = MakeColorSet(n_classes)
-        label_colours = []
-        for i in range(len(values[1:])):
-            
-            rgb = tuple(map(int,''.join(values[i+1].split()[1:])[1:-1].split(',')))
-            label_colours.append(rgb)
+            label_colours = []
+            for i in range(len(values[1:])):
+                
+                rgb = tuple(map(int,''.join(values[i+1].split()[1:])[1:-1].split(',')))
+                label_colours.append(rgb)
         label_colours = np.array(label_colours)
     else:
         raise NotImplementedError

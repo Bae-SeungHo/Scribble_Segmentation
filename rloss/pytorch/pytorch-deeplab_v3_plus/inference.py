@@ -122,7 +122,7 @@ def main():
         pred = np.argmax(pred, axis=1)
     
         # visualize prediction
-        segmap = decode_segmap(pred[0],'custom')*255
+        segmap = decode_segmap(pred[0],'custom',n_cls = args.n_class)*255
         segmap = segmap.astype(np.uint8)
         segimg = Image.fromarray(segmap, 'RGB')
         if args.output_directory is not None:

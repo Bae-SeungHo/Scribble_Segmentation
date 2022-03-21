@@ -20,8 +20,12 @@ class Path(object):
             if os.path.isfile('./temp.txt'):
                 with open('./temp.txt','r') as f:    
                     path=f.read()
-            else:
+            elif os.path.isdir('input/'):
                 _,path = SelectProject('input','','txt')
+                with open('./temp.txt','w') as f:    
+                    f.write(path)
+            else:
+                path = input("Please Input Project folder (if you don't have folder, just enter)\n>>")
                 with open('./temp.txt','w') as f:    
                     f.write(path)
             return path
