@@ -32,5 +32,6 @@ pip install -r requirements-bsh.txt
 * _02_split_train_test.py : 학습 데이터와 검증 데이터를 분류하고, train.txt , val.txt 파일을 생성합니다.
 * _03_train.py : 모델을 학습하고 model/ (기본값) 폴더에 최적의 모델을 생성합니다. 
 * _04_inference.py : 학습된 모델을 통해 Segmentation 을 수행합니다.
+* _05_show_result.py : 테스트 이미지를 통해 원본과 세그멘테이션 결과를 비교합니다.
 
 

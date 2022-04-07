@@ -22,6 +22,9 @@ import multiprocessing
 
 from DenseCRFLoss import DenseCRFLoss
 
+from datetime import datetime
+
+
 global grad_seg 
 
 def main():
@@ -99,7 +102,12 @@ def main():
     
     
     ## Change log - Added multiple pictures Processing
+    now = datetime.today().strftime("%d%H%M")
+    os.makedirs(os.path.join(args.output_directory,now),exist_ok=True)
     if os.path.isdir(args.image_path):
+        with open(os.path.join(args.output_directory,now,'path.txt'),'w') as f:
+            f.write(args.image_path)
+        
         imgs = glob(args.image_path + '/*')
     else:
         imgs = [args.image_path]
@@ -108,7 +116,7 @@ def main():
         img = imgs.pop(0)
         
         composed_transforms = transforms.Compose([
-                tr.FixScaleCropImage(crop_size=args.crop_size),
+                #tr.FixScaleCropImage(crop_size=args.crop_size),
                 tr.NormalizeImage(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
                 tr.ToTensorImage()])
         image = composed_transforms(Image.open(img).convert('RGB')).unsqueeze(0)
@@ -128,8 +136,9 @@ def main():
         if args.output_directory is not None:
             if not isdir(args.output_directory):
                 os.makedirs(args.output_directory)
+            img = '%s/%s' % (now,img.split('/')[-1])
             segimg.save(
-                join(args.output_directory, img.split('/')[-1].split('.')[0]+'_prediction.png')
+                join(args.output_directory,img)
             )
         else:
             plt.figure()

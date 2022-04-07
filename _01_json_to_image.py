@@ -51,8 +51,6 @@ def MakeColorSet(classes):
         label_dict[i] = color
         
     return label_dict
-        
-    number.append(num.pop(num.index(random.choice(num))))
 def main():
 
     jsons,path = SelectProject('input','JSONScribble','json')

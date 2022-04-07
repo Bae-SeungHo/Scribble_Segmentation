@@ -40,7 +40,7 @@ def main():
     os.makedirs('output/',exist_ok=True)
     
     #start inference
-    os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/inference.py --backbone mobilenet --checkpoint %s --image_path %s --output_directory %s --n_class %d' % (model , args.dataset , args.output,n_class))
+    os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/inference.py --backbone resnet --checkpoint %s --image_path %s --output_directory %s --n_class %d' % (model , args.dataset , args.output,n_class))
     if os.path.isfile('temp.txt'):
         os.remove('temp.txt')
     
