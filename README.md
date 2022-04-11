@@ -9,20 +9,28 @@ edited by Bae-SeungHo
 ### 0. Before Start
 ----------
 
-1. venv 를 통해 rloss 폴더 내의 'v-env' 이름의 가상환경을 생성하고 activate 해 주세요.
+1. pipenv 설치 후 python 3.7으로 가상환경을 생성해주세요.
 
 ```cmd
-python3 -m venv rloss/v-env
+pipenv --python 3.7
+pipenv shell
 ```
 
-
-2. rloss/ 폴더의 requirements-bsh.txt 를 설치해주세요 
+2. bilateralfilter 를 빌드해주세요.
 
 ```cmd
-pip install -r requirements-bsh.txt
+cd rloss/pytorch/wrapper/bilateralfilter
+swig -python -c++ bilateralfilter.i
+python setup.py install
 ```
 
-3. input/ 폴더에 새로운 폴더를 만들고, **JPEGImages** 폴더에는 원본 이미지, **JSONScribble** 폴더에는 라벨 데이터를 json 파일로 저장해주세요.
+3. requirements.txt 를 설치해주세요 
+
+```cmd
+pip install -r requirements.txt
+```
+
+4. input/ 폴더에 새로운 폴더를 만들고, **JPEGImages** 폴더에는 원본 이미지, **JSONScribble** 폴더에는 라벨 데이터를 json 파일로 저장해주세요.
 
 
 ### 1. Script Description
