@@ -1,5 +1,5 @@
 import os,sys
-sys.path.append('/home/qisens/bsh/')
+sys.path.append('/home/qisens/BSH/Scribble')
 from _01_json_to_image import SelectProject
 class Path(object):
     @staticmethod

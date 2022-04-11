@@ -29,18 +29,19 @@ def main():
                 path = f.read()
             with open(os.path.join(path,'classes.txt'),'r') as f:
                 n_class = f.readline()
-            n_class = int(n_class.strip())
-            print('n_class : %d'%n_class)
+            args.n_class = int(n_class.strip())
+            print('n_class : %d'%args.n_class)
         except:
             print('Please input the number of classes\n',end='>> ')
-            n_class = int(input())
+            args.n_class = int(input())
+            
 
 
             
     os.makedirs('output/',exist_ok=True)
     
     #start inference
-    os.system('rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/inference.py --backbone resnet --checkpoint %s --image_path %s --output_directory %s --n_class %d' % (model , args.dataset , args.output,n_class))
+    os.system('python rloss/pytorch/pytorch-deeplab_v3_plus/inference.py --backbone resnet --checkpoint %s --image_path %s --output_directory %s --n_class %s' % (model , args.dataset , args.output,args.n_class))
     if os.path.isfile('temp.txt'):
         os.remove('temp.txt')
     

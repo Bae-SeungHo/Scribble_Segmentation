@@ -33,7 +33,7 @@ def main():
     os.makedirs(args.output,exist_ok=True)
     
     #you can customize parameters
-    command = 'rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone resnet --lr %s --worker 4 --epochs %s --batch-size %s --checkname %s --dataset %s --eval-interval 5 --save-interval 5 ' % (args.lr , args.epochs ,args.batch, args.name, args.dataset)
+    command = 'python rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone resnet --lr %s --worker 4 --epochs %s --batch-size %s --checkname %s --dataset %s --eval-interval 5 --save-interval 5 ' % (args.lr , args.epochs ,args.batch, args.name, args.dataset)
     #like 'rloss/v-env/bin/python3.7 rloss/pytorch/pytorch-deeplab_v3_plus/train_withdensecrfloss.py --backbone mobilenet --lr %s --worker 4 --epochs %s --batch-size 4 --checkname %s --dataset %s --densecrfloss 2e-9 --rloss-scale 0.5 --sigma-rgb 15 --sigma-xy 100 --eval-interval 5 --save-interval 5' % (args.lr , args.epochs , args.name,args.dataset)
     
     if args.checkpoint == 'auto':
